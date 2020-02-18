@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?= $this->partial('shared/head', ['_meta'=>$_meta]) ?>
+</head>
+<body>
+    <?= $this->partial('shared/header') ?>
+    <div class="navbar-main-spacer"></div>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-white navbar-shadow">
+        <div class="navbar-multiline mr-auto">
+            <span class="navbar-brand" href="#0"><?= hs($_meta['subtitle']) ?></span>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <?php foreach($_meta['bcrumb'] as $link): ?>
+                        <?php if($link[1] === '#'): ?>
+                            <li class="breadcrumb-item active" aria-current="page"><?= hs($link[0]) ?></li>
+                        <?php else: ?>
+                            <li class="breadcrumb-item"><a href="<?= $link[1] ?>"><?= hs($link[0]) ?></a></li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </ol>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header"><?= hs($_meta['title']) ?></div>
+                    <div class="list-group list-group-flush">
+                        <?php foreach($_meta['menus'] as $menu): ?>
+                            <?php if($menu->active): ?>
+                                <a class="list-group-item list-group-item-action active" href="#0">
+                                    <?= hs($menu->label) ?>
+                                </a>
+                            <?php else: ?>
+                                <a class="list-group-item list-group-item-action" href="<?= hs($menu->link) ?>">
+                                    <?= hs($menu->label) ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <?= $content ?>
+            </div>
+        </div>
+    </div>
+
+    <?= $this->partial('shared/footer') ?>
+    
+    <?= $this->partial('shared/foot', ['_meta'=>$_meta]) ?>
+</body>
+</html>
