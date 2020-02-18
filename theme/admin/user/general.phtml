@@ -19,21 +19,21 @@
                     <div class="col-md-4">
                         <?php if(isset($fields['top-left'])): ?>
                             <?php foreach($fields['top-left'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                     <div class="col-md-4">
                         <?php if(isset($fields['top-center'])): ?>
                             <?php foreach($fields['top-center'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                     <div class="col-md-4">
                         <?php if(isset($fields['top-right'])): ?>
                             <?php foreach($fields['top-right'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
@@ -42,7 +42,7 @@
                     <div class="col-md-12">
                         <?php if(isset($fields['middle'])): ?>
                             <?php foreach($fields['middle'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
@@ -51,14 +51,14 @@
                     <div class="col-md-5">
                         <?php if(isset($fields['bottom-left'])): ?>
                             <?php foreach($fields['bottom-left'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                     <div class="col-md-7">
                         <?php if(isset($fields['bottom-right'])): ?>
                             <?php foreach($fields['bottom-right'] as $fname): ?>
-                                <?= $form->field($fname); ?>
+                                <?= $form->field($fname, ($opts[$fname]??null)); ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>

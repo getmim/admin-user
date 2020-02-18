@@ -37,6 +37,9 @@ class EditorController extends \Admin\Controller
         $params['_meta']['bcrumb']   = $bcrumb;
         $params['_meta']['menus']    = $menus;
 
+        if(!isset($params['opts']))
+            $params['opts'] = [];
+
         parent::resp($view, $params, 'admin-user');
     }
 }

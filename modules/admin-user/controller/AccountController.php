@@ -47,19 +47,37 @@ class AccountController extends EditorController
 
         $params['fields'] = [];
 
+        $params['opts']  = [];
+
+        $c_opts = [];
+
         $fields = $form->getFields();
         foreach($fields as $fname => $field){
             if(!isset($params['fields'][$field->position]))
                 $params['fields'][$field->position] = [];
             $params['fields'][$field->position][] = $fname;
+            if(isset($field->c_opt))
+                $c_opts[$fname] = $field->c_opt;
+        }
+
+        if($c_opts){
+            $combiner = new Combiner($id, $c_opts, 'user');
+            $user     = $combiner->prepare($user);
+
+            $params['opts'] = $combiner->getOptions();
         }
 
         if(!($valid = $form->validate($user)) || !$form->csrfTest('noob'))
             return $this->resp('user/general', $params);
 
+        if($c_opts){
+            $valid = $combiner->finalize($valid);
+            $combiner->save($id, $this->user->id);
+        }
+
         if(!User::set((array)$valid, ['id'=>$id]))
             deb(User::lastError());
-
+        
         // add the log
         $this->addLog([
             'user'   => $this->user->id,
