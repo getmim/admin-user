@@ -31,6 +31,7 @@
         </div>
         <div class="col-md-9">
             <?php if($users): ?>
+                <?php $contrib = module_exists('lib-user-main-contributor'); ?>
                 <?php $csrf = $form->csrfToken(); ?>
                 <ul class="list-group list-group-flush card mb-3">
                     <?php foreach($users as $user): ?>
@@ -68,6 +69,12 @@
                                     <i class="fas fa-calendar-day"></i>
                                     <?= $user->role->name->safe ?>
                                 </span>
+                                <?php endif; ?>
+                                <?php if($contrib && $user->contributor): ?>
+                                    &middot;
+                                    <span class="text-info">
+                                        Contributor
+                                    </span>
                                 <?php endif; ?>
                             </small>
                         </li>
