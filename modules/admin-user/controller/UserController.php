@@ -38,6 +38,14 @@ class UserController extends \Admin\Controller
 
         $form           = new Form('admin.user.create');
         $params['form'] = $form;
+
+        $params['fields'] = [];
+        $fields = $form->getFields();
+        foreach($fields as $fname => $field){
+            if(!isset($params['fields'][$field->position]))
+                $params['fields'][$field->position] = [];
+            $params['fields'][$field->position][] = $fname;
+        }
         
         if(!($valid = $form->validate($user)) || !$form->csrfTest('noob'))
             return $this->resp('user/create', $params);

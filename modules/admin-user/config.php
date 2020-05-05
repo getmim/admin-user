@@ -2,7 +2,7 @@
 
 return [
     '__name' => 'admin-user',
-    '__version' => '0.1.0',
+    '__version' => '0.1.1',
     '__git' => 'git@github.com:getmim/admin-user.git',
     '__license' => 'MIT',
     '__author' => [
@@ -170,6 +170,7 @@ return [
                     'label' => 'Name',
                     'type' => 'text',
                     'slugof' => 'fullname',
+                    'position' => 'center',
                     'rules' => [
                         'required' => TRUE,
                         'empty' => FALSE,
@@ -183,6 +184,7 @@ return [
                 'fullname' => [
                     'label' => 'Fullname',
                     'type' => 'text',
+                    'position' => 'center',
                     'rules' => [
                         'required' => TRUE,
                         'empty' => FALSE
@@ -192,6 +194,7 @@ return [
                     'label' => 'Password',
                     'type' => 'password',
                     'meter' => TRUE,
+                    'position' => 'center',
                     'rules' => [
                         'required' => TRUE,
                         'empty' => FALSE,
@@ -204,6 +207,7 @@ return [
                     'label' => 'Avatar',
                     'type' => 'image',
                     'form' => 'std-image',
+                    'position' => 'left',
                     'rules' => [
                         'upload' => TRUE
                     ]
@@ -215,6 +219,7 @@ return [
                         2 => 'Unverified',
                         3 => 'Verified'
                     ],
+                    'position' => 'left',
                     'rules' => [
                         'required' => TRUE,
                         'empty' => FALSE
