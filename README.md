@@ -36,5 +36,7 @@ return [
 
 ### General
 
-Untuk profile editor form `admin.user.account`, tambahkan rule-rule dengan tambahan property `position` yang menerima
+Untuk account editor form `admin.user.account`, tambahkan rule-rule dengan tambahan property `position` yang menerima
 nilai `top-left`, `top-center`, `top-right`, `middle`, `bottom-left` dan `bottom-right`.
+
+Struktur yang sama juga berlaku untuk profile editor dengan form name `admin.user.profile`.
