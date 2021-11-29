@@ -2,7 +2,7 @@
 /**
  * UserController
  * @package admin-user
- * @version 0.0.1
+ * @version 0.1.2
  */
 
 namespace AdminUser\Controller;
@@ -142,6 +142,11 @@ class UserController extends \Admin\Controller
             'name' => time() . '#' . $user->name,
             'status' => 0
         ];
+        if (module_exists('lib-user-main-email'))
+            $u_set['email'] = time() . '#' . $user->email;
+        if (module_exists('lib-user-main-phone'))
+            $u_set['phone'] = time() . '#' . $user->phone;
+
         User::set($u_set, ['id'=>$id]);
 
         $this->res->redirect($next);
