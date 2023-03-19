@@ -12,10 +12,12 @@ use LibForm\Library\Form;
 use LibForm\Library\Combiner;
 use LibPagination\Library\Paginator;
 use LibUserMain\Model\User;
+use LibEvent\Library\Event;
 
 class AccountController extends EditorController
 {
-    private function getParams(string $title): array{
+    private function getParams(string $title): array
+    {
         return [
             '_meta' => [
                 'title' => $title,
@@ -26,18 +28,22 @@ class AccountController extends EditorController
         ];
     }
 
-    public function editAction(){
-        if(!$this->user->isLogin())
+    public function editAction()
+    {
+        if (!$this->user->isLogin()) {
             return $this->loginFirst(1);
-        if(!$this->can_i->manage_user_account)
+        }
+        if (!$this->can_i->manage_user_account) {
             return $this->show404();
+        }
 
         $user = (object)[];
 
         $id = $this->req->param->id;
         $user = User::getOne(['id'=>$id]);
-        if(!$user)
+        if (!$user) {
             return $this->show404();
+        }
         $params = $this->getParams('Edit User Account');
 
         $form            = new Form('admin.user.account');
@@ -52,31 +58,35 @@ class AccountController extends EditorController
         $c_opts = [];
 
         $fields = $form->getFields();
-        foreach($fields as $fname => $field){
-            if(!isset($params['fields'][$field->position]))
+        foreach ($fields as $fname => $field) {
+            if (!isset($params['fields'][$field->position])) {
                 $params['fields'][$field->position] = [];
+            }
             $params['fields'][$field->position][] = $fname;
-            if(isset($field->c_opt))
+            if (isset($field->c_opt)) {
                 $c_opts[$fname] = $field->c_opt;
+            }
         }
 
-        if($c_opts){
+        if ($c_opts) {
             $combiner = new Combiner($id, $c_opts, 'user');
             $user     = $combiner->prepare($user);
 
             $params['opts'] = $combiner->getOptions();
         }
 
-        if(!($valid = $form->validate($user)) || !$form->csrfTest('noob'))
+        if (!($valid = $form->validate($user)) || !$form->csrfTest('noob')) {
             return $this->resp('user/general', $params);
+        }
 
-        if($c_opts){
+        if ($c_opts) {
             $valid = $combiner->finalize($valid);
             $combiner->save($id, $this->user->id);
         }
 
-        if(!User::set((array)$valid, ['id'=>$id]))
+        if (!User::set((array)$valid, ['id'=>$id])) {
             deb(User::lastError());
+        }
         
         // add the log
         $this->addLog([
@@ -88,6 +98,14 @@ class AccountController extends EditorController
             'original' => $user,
             'changes'  => $valid
         ]);
+
+        if (module_exists('lib-event')) {
+            $data = [
+                'original' => $user,
+                'changes'  => $valid
+            ];
+            Event::trigger('user.account.updated', $data);
+        }
 
         $params['saved'] = true;
         $this->resp('user/general', $params);
