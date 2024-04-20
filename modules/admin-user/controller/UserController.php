@@ -12,6 +12,7 @@ use LibForm\Library\Form;
 use LibForm\Library\Combiner;
 use LibPagination\Library\Paginator;
 use LibUserMain\Model\User;
+use LibUserPerm\Model\UserPermRole;
 
 class UserController extends \Admin\Controller
 {
@@ -76,13 +77,40 @@ class UserController extends \Admin\Controller
         if(!$this->can_i->manage_user)
             return $this->show404();
 
+        $roles = [];
+        if (module_exists('lib-user-perm')) {
+            $roles = UserPermRole::get([]);
+            if ($roles) {
+                $active_role = $roles[0]->id;
+            }
+
+            // check if user with no role exists
+            $unroled = User::count(['role' => null]);
+            if ($unroled) {
+                array_unshift($roles, (object)['id' => -1, 'name' => 'Unroled']);
+            }
+        }
+
         $cond = $pcond = [];
         if($q = $this->req->getQuery('q'))
             $pcond['q'] = $cond['q'] = $q;
 
+        if (module_exists('lib-user-perm')) {
+            if ($role = $this->req->getQuery('role')) {
+                $active_role = $pcond['role'] = $role;
+                if ($role == -1) {
+                    $role = null;
+                }
+                $cond['role'] = $role;
+            } else {
+                $cond['role'] = $active_role;
+            }
+        }
+
         list($page, $rpp) = $this->req->getPager(25, 50);
 
         $cond['status'] = ['__op', '>', 0];
+
         $users = User::get($cond, $rpp, $page, ['fullname'=>true]) ?? [];
         if($users){
             $fmt = [];
@@ -94,6 +122,8 @@ class UserController extends \Admin\Controller
         $params          = $this->getParams('Users');
         $params['users'] = $users;
         $params['form']  = new Form('admin.user.index');
+        $params['roles'] = $roles;
+        $params['role']  = $active_role;
 
         $params['form']->validate( (object)$this->req->get() );
 
