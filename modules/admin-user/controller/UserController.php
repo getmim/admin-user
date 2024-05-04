@@ -78,8 +78,9 @@ class UserController extends \Admin\Controller
             return $this->show404();
 
         $roles = [];
+        $active_role = null;
         if (module_exists('lib-user-perm')) {
-            $roles = UserPermRole::get([]);
+            $roles = UserPermRole::get([]) ?? [];
             if ($roles) {
                 $active_role = $roles[0]->id;
             }
